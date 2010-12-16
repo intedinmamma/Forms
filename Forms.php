@@ -33,7 +33,7 @@ class Forms {
 	}
 	
 	/**
-	 * Returns a generic stdClass object populated with the values of the form fields.
+	 * Returns a stdClass object populated with the values of the form fields.
 	 *
 	 * @param string $name Name of the form to get object for
 	 * @return object
