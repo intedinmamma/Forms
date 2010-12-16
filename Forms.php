@@ -27,7 +27,7 @@ class Forms {
 		$this->form_validation->set_error_delimiters('<p class="form-error">', '</p>');
 		foreach($this->forms[$name] as $item)
 			if(is_callable(array($this, 'form_element_'.$item['type'])))
-				$out .= call_user_func(array($this, 'form_element_'.$item['type']), $item);
+				$out .= call_user_func(array($this, 'form_element_'.$item['type']), $item, $object);
 				
 		return $out.form_submit('submit', 'Ok »').form_close();
 	}
@@ -73,19 +73,19 @@ class Forms {
 		return $values;
 	}
 	
-	protected function form_element_text(Array $item) {
-		return $this->form_element_generic('form_input', $item);
+	protected function form_element_text(Array $item, $object = NULL) {
+		return $this->form_element_generic('form_input', $item, $object);
 	}
 	
-	protected function form_element_password(Array $item) {
-		return $this->form_element_generic('form_password', $item);		
+	protected function form_element_password(Array $item, $object = NULL) {
+		return $this->form_element_generic('form_password', $item, $object);		
 	}
 	
-	protected function form_element_textarea(Array $item) {
-		return $this->form_element_generic('form_textarea', $item);
+	protected function form_element_textarea(Array $item, $object = NULL) {
+		return $this->form_element_generic('form_textarea', $item, $object);
 	}
 	
-	protected function form_element_generic($function, Array $item) {
+	protected function form_element_generic($function, Array $item, $object = NULL) {
 		$out = form_label($item['label'], $item['field']);
 		$out .= $function(array(
 			'name' => $item['field'],
@@ -95,14 +95,14 @@ class Forms {
 		return $out;
 	}
 	
-	protected function form_element_dropdown(Array $item) {
+	protected function form_element_dropdown(Array $item, $object = NULL) {
 		$out = form_label($item['label'], $item['field']);
 		$out .= form_dropdown($item['field'], $this->get_values($item), $this->set_value($item['field'], $object));
 		$out .= form_error($item['field']);
 		return $out;
 	}
 	
-	protected function form_element_checkbox(Array $item) {
+	protected function form_element_checkbox(Array $item, $object = NULL) {
 		$out = form_label(form_checkbox($item['field'], 1, (bool) $this->set_value($item['field'], $object)).' '.$item['label'], $item['field']);
 		$out .= form_error($item['field']);
 		return $out;
