@@ -84,3 +84,14 @@ application/controllers/post.php
 			}
 		}
 	}
+
+Adding custom field types
+-------------------------
+You can add custom field types by extending the library. Add a form_element_(type) method, where (type) corresponds to the field type that you specify in the config.
+
+	<?php
+	class MY_Forms extends Forms {
+		public function form_element_debug($item) {
+			return '<pre>'.print_r($item, TRUE).'</pre>';
+		}
+	}
