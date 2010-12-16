@@ -25,28 +25,10 @@ class Forms {
 			
 		$out = form_open($action);
 		$this->form_validation->set_error_delimiters('<p class="form-error">', '</p>');
-		foreach($this->forms[$name] as $item) {
-			switch($item['type']) {
-				case 'text':
-					$out .= $this->generic_form_element('form_input', $item);
-					break;
-				case 'password':
-					$out .= $this->generic_form_element('form_password', $item);
-					break;
-				case 'textarea':
-					$out .= $this->generic_form_element('form_textarea', $item);
-					break;
-				case 'dropdown':
-					$out .= form_label($item['label'], $item['field']);
-					$out .= form_dropdown($item['field'], $item['values'], $this->set_value($item['field'], $object));
-					$out .= form_error($item['field']);
-					break;
-				case 'checkbox':
-					$out .= form_label(form_checkbox($item['field'], 1, (bool) $this->set_value($item['field'], $object)).' '.$item['label'], $item['field']);
-					$out .= form_error($item['field']);
-					break;
-			}
-		}
+		foreach($this->forms[$name] as $item)
+			if(is_callable(array($this, 'form_element_'.$item['type'])))
+				$out .= call_user_func(array($this, 'form_element_'.$item['type']), $item);
+				
 		return $out.form_submit('submit', 'Ok »').form_close();
 	}
 	
@@ -80,13 +62,38 @@ class Forms {
 		return is_null($object) ? set_value($field) : set_value($field, $object->$field);
 	}
 	
-	protected function generic_form_element($function, $item) {
+	protected function form_element_text($item) {
+		return $this->form_element_generic('form_input', $item);
+	}
+	
+	protected function form_element_password($item) {
+		return $this->form_element_generic('form_password', $item);		
+	}
+	
+	protected function form_element_textarea($item) {
+		return $this->form_element_generic('form_textarea', $item);
+	}
+	
+	protected function form_element_generic($function, $item) {
 		$out = form_label($item['label'], $item['field']);
 		$out .= $function(array(
 			'name' => $item['field'],
 			'value' => $this->set_value($item['field'], $object)
 		));
 		$out .= form_error($item['field']);	
+		return $out;
+	}
+	
+	protected function form_element_dropdown($item) {
+		$out = form_label($item['label'], $item['field']);
+		$out .= form_dropdown($item['field'], $item['values'], $this->set_value($item['field'], $object));
+		$out .= form_error($item['field']);
+		return $out;
+	}
+	
+	protected function form_element_checkbox($item) {
+		$out = form_label(form_checkbox($item['field'], 1, (bool) $this->set_value($item['field'], $object)).' '.$item['label'], $item['field']);
+		$out .= form_error($item['field']);
 		return $out;
 	}
 }
