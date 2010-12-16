@@ -22,6 +22,8 @@ class Forms {
 	public function get($name, $action = NULL, $object = NULL) {
 		if(is_null($action))
 			$action = current_url();
+		if( ! is_object($object))
+			$object = NULL;
 			
 		$out = form_open($action);
 		$this->form_validation->set_error_delimiters('<p class="form-error">', '</p>');
