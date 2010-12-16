@@ -62,6 +62,16 @@ class Forms {
 		return is_null($object) ? set_value($field) : set_value($field, $object->$field);
 	}
 	
+	protected function get_values($item) {
+		if( ! isset($item['values']))
+			$values = array();
+		elseif(is_callable($item['values']))
+			$values = call_user_func($item['values']);
+		else
+			$values = $item['values'];
+		return $values;
+	}
+	
 	protected function form_element_text($item) {
 		return $this->form_element_generic('form_input', $item);
 	}
@@ -86,7 +96,7 @@ class Forms {
 	
 	protected function form_element_dropdown($item) {
 		$out = form_label($item['label'], $item['field']);
-		$out .= form_dropdown($item['field'], $item['values'], $this->set_value($item['field'], $object));
+		$out .= form_dropdown($item['field'], $this->get_values($item), $this->set_value($item['field'], $object));
 		$out .= form_error($item['field']);
 		return $out;
 	}
