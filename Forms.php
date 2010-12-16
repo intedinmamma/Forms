@@ -36,13 +36,14 @@ class Forms {
 	 * Returns a stdClass object populated with the values of the form fields.
 	 *
 	 * @param string $name Name of the form to get object for
+	 * @param string $object Name of the object to get
 	 * @return object
 	 * @author Johnny Karhinen
 	 */
-	public function get_object($name) {
+	public function get_object($name, $object = NULL) {
 		$object = new stdClass;
 		foreach($this->forms[$name] as $item)
-			if( ! isset($item['object']))
+			if( ! isset($item['object']) || $item['object'] == $object)
 				$object->{$item['field']} = $this->input->post($item['field']);
 		return $object;
 	}
