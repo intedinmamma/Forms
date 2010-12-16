@@ -4,8 +4,8 @@ class Forms {
 	
 	public function __construct($forms = array()) {
 		$this->forms = $forms;
-		$this->load->helper('form');
-		$this->load->library('form_validation', $forms);
+		get_instance()->load->helper('form');
+		get_instance()->load->library('form_validation', $forms);
 		$this->form_validation = get_instance()->form_validation;
 		$this->input = get_instance()->input;
 	}
