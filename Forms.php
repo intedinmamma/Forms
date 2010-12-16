@@ -62,7 +62,7 @@ class Forms {
 		return is_null($object) ? set_value($field) : set_value($field, $object->$field);
 	}
 	
-	protected function get_values($item) {
+	protected function get_values(Array $item) {
 		if( ! isset($item['values']))
 			$values = array();
 		elseif(is_callable($item['values']))
@@ -72,19 +72,19 @@ class Forms {
 		return $values;
 	}
 	
-	protected function form_element_text($item) {
+	protected function form_element_text(Array $item) {
 		return $this->form_element_generic('form_input', $item);
 	}
 	
-	protected function form_element_password($item) {
+	protected function form_element_password(Array $item) {
 		return $this->form_element_generic('form_password', $item);		
 	}
 	
-	protected function form_element_textarea($item) {
+	protected function form_element_textarea(Array $item) {
 		return $this->form_element_generic('form_textarea', $item);
 	}
 	
-	protected function form_element_generic($function, $item) {
+	protected function form_element_generic($function, Array $item) {
 		$out = form_label($item['label'], $item['field']);
 		$out .= $function(array(
 			'name' => $item['field'],
@@ -94,14 +94,14 @@ class Forms {
 		return $out;
 	}
 	
-	protected function form_element_dropdown($item) {
+	protected function form_element_dropdown(Array $item) {
 		$out = form_label($item['label'], $item['field']);
 		$out .= form_dropdown($item['field'], $this->get_values($item), $this->set_value($item['field'], $object));
 		$out .= form_error($item['field']);
 		return $out;
 	}
 	
-	protected function form_element_checkbox($item) {
+	protected function form_element_checkbox(Array $item) {
 		$out = form_label(form_checkbox($item['field'], 1, (bool) $this->set_value($item['field'], $object)).' '.$item['label'], $item['field']);
 		$out .= form_error($item['field']);
 		return $out;
