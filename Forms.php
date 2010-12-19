@@ -88,10 +88,12 @@ class Forms {
 	}
 	
 	protected function form_element_generic($function, Array $item, $object = NULL) {
+		$error_class = (bool) form_error($item['field']) ? 'form-item-error' : '';
 		$out = form_label($item['label'], $item['field']);
 		$out .= $function(array(
 			'name' => $item['field'],
-			'value' => $this->set_value($item['field'], $object)
+			'value' => $this->set_value($item['field'], $object),
+			'class' => $error_class
 		));
 		$out .= form_error($item['field']);	
 		return $out;
